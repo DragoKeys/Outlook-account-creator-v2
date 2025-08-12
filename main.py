@@ -10,23 +10,16 @@ import time
 import json
 from fake_data import generate_fake_data
 from check_email import check_email
-import requests
-import random
-import fake_useragent
-
-
 
 # Load the configuration from config.json
 with open('config.json', 'r') as f:
     config = json.load(f)
-    
 
-# Extract the proxy details and API key from the configuration
+# Extract the proxy details from the configuration
 proxy_host = config['proxy_host']
 proxy_port = config['proxy_port']
 username = config['username']
 password = config['password']
-api_key = config['api_key']
 
 
 
@@ -130,12 +123,6 @@ class AccGen:
         chrome_options.add_argument("--lang=en")
         chrome_options.add_argument("--headless=new")
 
-        # Download the latest NopeCHA crx extension file.
-        # You can also supply a path to a directory with unpacked extension files.
-        with open('ext.crx', 'wb') as f:
-            f.write(requests.get('https://nopecha.com/f/ext.crx').content)
-
-        
         if not self.driver:
             mode = config['mode']
     
@@ -158,18 +145,12 @@ class AccGen:
                 )
                 chrome_options.add_extension(proxy_auth_plugin_path)
     
-            # Add NopeCHA extension
-            chrome_options.add_extension('ext.crx')
-
             self.driver = webdriver.Chrome(options=chrome_options)
 
-            # Set the subscription key for the NopeCHA extension
-            self.driver.get(f"https://nopecha.com/setup#{api_key}")
-            
             time.sleep(2)
             self.driver.get('https://www.google.com')
-            time.sleep(2)    
-    
+            time.sleep(2)
+
             self.driver.get('https://signup.live.com/signup')
             time.sleep(2)
 
@@ -306,8 +287,7 @@ class AccGen:
             pass
 
         print('Trying to solve captcha ...')
-
-        time.sleep(60)
+        input("Résoudre le captcha puis appuyer sur Entrée…")
 
         # Wait up to 300 seconds for the captcha to be solved
         ok_button = WebDriverWait(self.driver, 300).until(
