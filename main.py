@@ -10,6 +10,7 @@ import time
 import json
 from fake_data import generate_fake_data
 from check_email import check_email
+from excel_logger import append_account
 
 # Load the configuration from config.json
 with open('config.json', 'r') as f:
@@ -304,6 +305,24 @@ class AccGen:
             f.write(f"Email: {email}\n")
             f.write(f"Password: {password}\n")
             print("Email and password saved to generated.txt")
+
+        row_data = [
+            email,
+            password,
+            first_name,
+            last_name,
+            birth_date.isoformat(),
+            config.get("proxy_host", ""),
+            config.get("proxy_port", ""),
+            config.get("username", ""),
+            config.get("password", ""),
+            time.strftime("%Y-%m-%d %H:%M:%S"),
+            "",
+            "",
+            "",
+            "",
+        ]
+        append_account(row_data)
 
     def create_account(self):
         while True:
